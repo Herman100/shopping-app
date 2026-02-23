@@ -10,17 +10,17 @@ export default function App() {
           onPress={() => console.log("Coffee selected")}
           style={styles.button}
         >
-          <Text style={styles.text}>Press Me</Text>
+          <Text style={styles.buttonText}>Press Me</Text>
         </Pressable>
       </View>
       <View style={{ ...styles.lineSeparator }} />
       <View style={styles.item}>
-        <Text style={styles.text}>Tea</Text>
+        <Text style={styles.buttonText}>Tea</Text>
         <Pressable
           onPress={() => console.log("Tea selected")}
           style={styles.button}
         >
-          <Text style={styles.text}>Press Me</Text>
+          <Text style={styles.buttonText}>Press Me</Text>
         </Pressable>
       </View>
       <View style={{ ...styles.lineSeparator }} />
@@ -30,7 +30,7 @@ export default function App() {
           onPress={() => console.log("Juice selected")}
           style={styles.button}
         >
-          <Text style={styles.text}>Press Me</Text>
+          <Text style={styles.buttonText}>Press Me</Text>
         </Pressable>
       </View>
     </View>
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
   text: {
     color: theme.colors.text,
     fontFamily: theme.fonts.regular,
-    padding: theme.spacing.medium,
     justifyContent: "center",
     alignItems: "center",
     includeFontPadding: false,
@@ -71,6 +70,11 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.secondary,
     borderWidth: 1,
     ...theme.shadows.medium,
+  },
+  buttonText: {
+    color: theme.colors.text,
+    fontFamily: theme.fonts.bold,
+    textTransform: "uppercase",
   },
   lineSeparator: {
     width: "100%",
