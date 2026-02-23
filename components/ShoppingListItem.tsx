@@ -14,15 +14,15 @@ export function ShoppingListItem({ item }: ShoppingListItemProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: theme.spacing.small,
-    backgroundColor: theme.colors.background,
-    color: theme.colors.text,
-    alignItems: "center",
-    marginTop: 50,
-    // justifyContent: "flex-start",
-  },
+  // container: {
+  //   flex: 1,
+  //   gap: theme.spacing.small,
+  //   backgroundColor: theme.colors.background,
+  //   color: theme.colors.text,
+  //   alignItems: "center",
+  //   marginTop: 50,
+  //   // justifyContent: "flex-start",
+  // },
   item: {
     flexDirection: "row",
     width: "80%",
@@ -40,22 +40,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     includeFontPadding: false,
   },
-  button: {
-    padding: 8,
-    borderRadius: 6,
-    backgroundColor: theme.colors.secondary,
-    borderColor: theme.colors.secondary,
-    borderWidth: 1,
-    ...theme.shadows.medium,
-  },
-  buttonText: {
-    color: theme.colors.primary,
-    fontFamily: theme.fonts.bold,
-    textTransform: "uppercase",
-  },
-  lineSeparator: {
-    width: "100%",
-    height: 0.5,
-    backgroundColor: theme.colors.secondary,
-  },
+  // button: {
+  //   padding: 8,
+  //   borderRadius: 6,
+  //   backgroundColor: theme.colors.secondary,
+  //   borderColor: theme.colors.secondary,
+  //   borderWidth: 1,
+  //   ...theme.shadows.medium,
+  // },
+  // buttonText: {
+  //   color: theme.colors.primary,
+  //   fontFamily: theme.fonts.bold,
+  //   textTransform: "uppercase",
+  // },
+  // lineSeparator: {
+  //   width: "100%",
+  //   height: 0.5,
+  //   backgroundColor: theme.colors.secondary,
+  // },
 });

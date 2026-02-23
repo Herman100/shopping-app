@@ -85,13 +85,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     ...theme.shadows.heavy,
   },
-  text: {
-    color: theme.colors.text,
-    fontFamily: theme.fonts.regular,
-    justifyContent: "center",
-    alignItems: "center",
-    includeFontPadding: false,
-  },
+  // text: {
+  //   color: theme.colors.text,
+  //   fontFamily: theme.fonts.regular,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   includeFontPadding: false,
+  // },
   button: {
     padding: 8,
     borderRadius: 6,
