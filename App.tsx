@@ -23,6 +23,16 @@ export default function App() {
           <Text style={styles.text}>Press Me</Text>
         </Pressable>
       </View>
+      <View style={{ ...styles.lineSeparator }} />
+      <View style={styles.item}>
+        <Text style={styles.text}>Juice</Text>
+        <Pressable
+          onPress={() => console.log("Juice selected")}
+          style={styles.button}
+        >
+          <Text style={styles.text}>Press Me</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -30,16 +40,17 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: theme.spacing.small,
     backgroundColor: theme.colors.background,
     color: theme.colors.text,
     alignItems: "center",
-    // justifyContent: 'flex-start',
+    marginTop: 50,
+    // justifyContent: "flex-start",
   },
   item: {
-    flex: 1,
     flexDirection: "row",
     width: "80%",
-    height: 150,
+    height: 48,
     backgroundColor: theme.colors.primary,
     borderRadius: theme.borderRadius.medium,
     justifyContent: "space-between",
@@ -50,20 +61,15 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontFamily: theme.fonts.regular,
     padding: theme.spacing.medium,
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    includeFontPadding: false,
   },
   button: {
-    padding: theme.spacing.medium,
-    width: "auto",
-    height: 48,
-    borderRadius: 20,
+    padding: 8,
+    borderRadius: 6,
     borderColor: theme.colors.secondary,
     borderWidth: 1,
-    flex: 0,
-    justifyContent: "center",
-    alignItems: "center",
     ...theme.shadows.medium,
   },
   lineSeparator: {
