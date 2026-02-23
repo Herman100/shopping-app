@@ -1,5 +1,12 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import { theme } from "./theme";
+
+function showAlert(title: string, item?: string) {
+  Alert.alert(title, "This action cannot be undone.", [
+    { text: "Cancel", style: "destructive" },
+    { text: "OK", onPress: () => Alert.alert("You have selected " + item) },
+  ]);
+}
 
 export default function App() {
   return (
@@ -7,30 +14,36 @@ export default function App() {
       <View style={styles.item}>
         <Text style={styles.text}>Coffee</Text>
         <Pressable
-          onPress={() => console.log("Coffee selected")}
+          onPress={() =>
+            showAlert("Are you sure you want to select Coffee?", "Coffee")
+          }
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Press Me</Text>
+          <Text style={styles.buttonText}>Select</Text>
         </Pressable>
       </View>
       <View style={{ ...styles.lineSeparator }} />
       <View style={styles.item}>
         <Text style={styles.buttonText}>Tea</Text>
         <Pressable
-          onPress={() => console.log("Tea selected")}
+          onPress={() =>
+            showAlert("Are you sure you want to select Tea?", "Tea")
+          }
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Press Me</Text>
+          <Text style={styles.buttonText}>Select</Text>
         </Pressable>
       </View>
       <View style={{ ...styles.lineSeparator }} />
       <View style={styles.item}>
-        <Text style={styles.text}>Juice</Text>
+        <Text style={styles.buttonText}>Juice</Text>
         <Pressable
-          onPress={() => console.log("Juice selected")}
+          onPress={() =>
+            showAlert("Are you sure you want to select Juice?", "Juice")
+          }
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Press Me</Text>
+          <Text style={styles.buttonText}>Select</Text>
         </Pressable>
       </View>
     </View>
@@ -78,7 +91,7 @@ const styles = StyleSheet.create({
   },
   lineSeparator: {
     width: "100%",
-    height: 3,
+    height: 0.5,
     backgroundColor: theme.colors.secondary,
   },
 });
