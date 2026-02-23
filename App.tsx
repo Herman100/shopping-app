@@ -1,51 +1,66 @@
 import { StyleSheet, Text, View, Pressable, Alert } from "react-native";
 import { theme } from "./theme";
-
-function showAlert(title: string, item?: string) {
-  Alert.alert(title, "This action cannot be undone.", [
-    { text: "Cancel", style: "destructive" },
-    { text: "OK", onPress: () => Alert.alert("You have selected " + item) },
-  ]);
-}
+import { ShoppingListItem } from "./components/ShoppingListItem";
+import { useState } from "react";
 
 export default function App() {
+  const [items, setItems] = useState<string[]>([]);
+
+  const showInput = () => {
+    Alert.prompt(
+      "Add Item",
+      "Enter the name of the item you want to add.",
+      (text) => {
+        const trimmedText = text.trim();
+
+        if (trimmedText === "") {
+          Alert.alert("Invalid input", "Please enter a valid item name.");
+        } else {
+          setItems((prevItems) => [...prevItems, trimmedText]);
+          Alert.alert(
+            "Item added",
+            `You have added ${trimmedText} to your shopping list.`,
+          );
+        }
+      },
+    );
+  };
+
+  const removeItem = (item: string) => {
+    Alert.alert(
+      "Remove Item",
+      `Are you sure you want to remove ${item} from your shopping list?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "OK",
+          style: "destructive",
+          onPress: () => {
+            setItems((prevItems) => prevItems.filter((i) => i !== item));
+            Alert.alert(
+              "Item removed",
+              `${item} has been removed from your shopping list.`,
+            );
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.item}>
-        <Text style={styles.text}>Coffee</Text>
-        <Pressable
-          onPress={() =>
-            showAlert("Are you sure you want to select Coffee?", "Coffee")
-          }
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Select</Text>
-        </Pressable>
-      </View>
-      <View style={{ ...styles.lineSeparator }} />
-      <View style={styles.item}>
-        <Text style={styles.buttonText}>Tea</Text>
-        <Pressable
-          onPress={() =>
-            showAlert("Are you sure you want to select Tea?", "Tea")
-          }
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Select</Text>
-        </Pressable>
-      </View>
-      <View style={{ ...styles.lineSeparator }} />
-      <View style={styles.item}>
-        <Text style={styles.buttonText}>Juice</Text>
-        <Pressable
-          onPress={() =>
-            showAlert("Are you sure you want to select Juice?", "Juice")
-          }
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Select</Text>
-        </Pressable>
-      </View>
+      <Pressable onPress={showInput} style={styles.button}>
+        <Text style={styles.buttonText}>Add Item</Text>
+      </Pressable>
+      <View style={styles.lineSeparator} />
+      {items.map((item, index) => (
+        <View key={`${item}-${index}` + "container"} style={styles.item}>
+          <ShoppingListItem key={`${item}-${index}`} item={item} />
+          <Pressable onPress={() => removeItem(item)} style={styles.button}>
+            <Text style={styles.buttonText}>Delete</Text>
+          </Pressable>
+        </View>
+      ))}
     </View>
   );
 }
@@ -80,12 +95,13 @@ const styles = StyleSheet.create({
   button: {
     padding: 8,
     borderRadius: 6,
+    backgroundColor: theme.colors.secondary,
     borderColor: theme.colors.secondary,
     borderWidth: 1,
     ...theme.shadows.medium,
   },
   buttonText: {
-    color: theme.colors.text,
+    color: theme.colors.primary,
     fontFamily: theme.fonts.bold,
     textTransform: "uppercase",
   },
