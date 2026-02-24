@@ -5,7 +5,7 @@ import { ShoppingListItem } from "./components/shopping-list/ShoppingListItem";
 export default function App() {
   return (
     <View style={styles.container}>
-      <ShoppingListItem key={`item1`} item={"Milk"} />
+      <ShoppingListItem />
     </View>
   );
 }

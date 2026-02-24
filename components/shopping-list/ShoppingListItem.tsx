@@ -2,11 +2,7 @@ import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
 import { theme } from "../../theme";
 import { useState } from "react";
 
-interface ShoppingListItemProps {
-  readonly item: string;
-}
-
-export function ShoppingListItem({ item }: ShoppingListItemProps) {
+export function ShoppingListItem() {
   const [items, setItems] = useState<string[]>([]);
 
   const showInput = () => {
@@ -55,24 +51,18 @@ export function ShoppingListItem({ item }: ShoppingListItemProps) {
   return (
     <View style={styles.container}>
       <Pressable onPress={showInput} style={styles.button}>
-        <Text style={styles.buttonText}>Add Item</Text>
+        <Text style={styles.buttonText}>Add item</Text>
       </Pressable>
       <View style={styles.lineSeparator} />
       {items.map((item, index) => (
         <View key={`${item}-${index}` + "container"} style={styles.item}>
           <Text style={styles.text}>{item}</Text>
-          <Pressable
-            onPress={() => removeItem && removeItem(item)}
-            style={styles.button}
-          >
+          <Pressable onPress={() => removeItem(item)} style={styles.button}>
             <Text style={styles.buttonText}>Delete</Text>
           </Pressable>
         </View>
       ))}
     </View>
-    // <View style={styles.item}>
-    //   <Text style={styles.text}>{item}</Text>
-    // </View>
   );
 }
 
@@ -88,16 +78,17 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: "row",
-    width: "80%",
+    width: "100%",
     height: 48,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.secondary,
     borderRadius: theme.borderRadius.medium,
     justifyContent: "space-between",
     alignItems: "center",
     ...theme.shadows.heavy,
+    paddingHorizontal: 16,
   },
   text: {
-    color: theme.colors.text,
+    color: theme.colors.primary,
     fontFamily: theme.fonts.regular,
     justifyContent: "center",
     alignItems: "center",
@@ -106,15 +97,16 @@ const styles = StyleSheet.create({
   button: {
     padding: 8,
     borderRadius: 6,
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: theme.colors.primary,
     borderColor: theme.colors.secondary,
     borderWidth: 1,
     ...theme.shadows.medium,
   },
   buttonText: {
-    color: theme.colors.primary,
+    color: theme.colors.secondary,
     fontFamily: theme.fonts.bold,
     textTransform: "uppercase",
+    paddingHorizontal: 8,
   },
   lineSeparator: {
     width: "100%",
