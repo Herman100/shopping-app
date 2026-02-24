@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
 import { theme } from "../../theme";
 import { useState } from "react";
+import { capitalizeFirstWord } from "../../utils/common";
 
 export function ShoppingListItem() {
   const [items, setItems] = useState<string[]>([]);
@@ -56,7 +57,7 @@ export function ShoppingListItem() {
       <View style={styles.lineSeparator} />
       {items.map((item, index) => (
         <View key={`${item}-${index}` + "container"} style={styles.item}>
-          <Text style={styles.text}>{item}</Text>
+          <Text style={styles.text}>{capitalizeFirstWord(item)}</Text>
           <Pressable onPress={() => removeItem(item)} style={styles.button}>
             <Text style={styles.buttonText}>Delete</Text>
           </Pressable>
