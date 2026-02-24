@@ -55,7 +55,7 @@ export default function App() {
       <View style={styles.lineSeparator} />
       {items.map((item, index) => (
         <View key={`${item}-${index}` + "container"} style={styles.item}>
-          <ShoppingListItem key={`${item}-${index}`} item={item} />
+          <ShoppingListItem key={`${item}-${index}`} item={item} isCompleted />
           <Pressable onPress={() => removeItem(item)} style={styles.button}>
             <Text style={styles.buttonText}>Delete</Text>
           </Pressable>
@@ -85,13 +85,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     ...theme.shadows.heavy,
   },
-  // text: {
-  //   color: theme.colors.text,
-  //   fontFamily: theme.fonts.regular,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   includeFontPadding: false,
-  // },
+
   button: {
     padding: 8,
     borderRadius: 6,
