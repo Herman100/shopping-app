@@ -4,6 +4,8 @@ export const theme = {
     secondary: "#fff",
     background: "#000",
     text: "#fff",
+    completed: "#4CAF50",
+    delete: "#f44336",
   },
   fonts: {
     regular: "System",

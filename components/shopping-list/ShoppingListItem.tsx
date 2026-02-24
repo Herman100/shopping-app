@@ -85,7 +85,7 @@ export function ShoppingListItem() {
           style={[
             styles.item,
             item.includes("completed") && {
-              backgroundColor: theme.colors.primary,
+              backgroundColor: theme.colors.completed,
             },
           ]}
         >
@@ -94,12 +94,18 @@ export function ShoppingListItem() {
             {!item.includes("completed") && (
               <Pressable
                 onPress={() => markCompleted(item)}
-                style={styles.button}
+                style={[
+                  styles.button,
+                  { backgroundColor: theme.colors.completed },
+                ]}
               >
                 <Text style={styles.buttonText}>Completed</Text>
               </Pressable>
             )}
-            <Pressable onPress={() => removeItem(item)} style={styles.button}>
+            <Pressable
+              onPress={() => removeItem(item)}
+              style={[styles.button, { backgroundColor: theme.colors.delete }]}
+            >
               <Text style={styles.buttonText}>Delete</Text>
             </Pressable>
           </View>
