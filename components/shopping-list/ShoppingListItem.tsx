@@ -49,6 +49,30 @@ export function ShoppingListItem() {
     );
   };
 
+  const markCompleted = (itemToMark: string) => {
+    Alert.alert(
+      "Mark as Completed",
+      `Are you sure you want to mark ${itemToMark} as completed?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "OK",
+          onPress: () => {
+            setItems((prevItems) =>
+              prevItems.map((item) =>
+                item === itemToMark ? `${item} completed` : item,
+              ),
+            );
+            Alert.alert(
+              "Item marked as completed",
+              `${itemToMark} has been marked as completed.`,
+            );
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Pressable onPress={showInput} style={styles.button}>
@@ -58,9 +82,17 @@ export function ShoppingListItem() {
       {items.map((item, index) => (
         <View key={`${item}-${index}` + "container"} style={styles.item}>
           <Text style={styles.text}>{capitalizeFirstWord(item)}</Text>
-          <Pressable onPress={() => removeItem(item)} style={styles.button}>
-            <Text style={styles.buttonText}>Delete</Text>
-          </Pressable>
+          <View style={{ flexDirection: "row", gap: theme.spacing.small }}>
+            <Pressable
+              onPress={() => markCompleted(item)}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>Completed</Text>
+            </Pressable>
+            <Pressable onPress={() => removeItem(item)} style={styles.button}>
+              <Text style={styles.buttonText}>Delete</Text>
+            </Pressable>
+          </View>
         </View>
       ))}
     </View>
