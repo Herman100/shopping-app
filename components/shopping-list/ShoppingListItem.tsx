@@ -80,15 +80,25 @@ export function ShoppingListItem() {
       </Pressable>
       <View style={styles.lineSeparator} />
       {items.map((item, index) => (
-        <View key={`${item}-${index}` + "container"} style={styles.item}>
+        <View
+          key={`${item}-${index}` + "container"}
+          style={[
+            styles.item,
+            item.includes("completed") && {
+              backgroundColor: theme.colors.primary,
+            },
+          ]}
+        >
           <Text style={styles.text}>{capitalizeFirstWord(item)}</Text>
           <View style={{ flexDirection: "row", gap: theme.spacing.small }}>
-            <Pressable
-              onPress={() => markCompleted(item)}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Completed</Text>
-            </Pressable>
+            {!item.includes("completed") && (
+              <Pressable
+                onPress={() => markCompleted(item)}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>Completed</Text>
+              </Pressable>
+            )}
             <Pressable onPress={() => removeItem(item)} style={styles.button}>
               <Text style={styles.buttonText}>Delete</Text>
             </Pressable>
