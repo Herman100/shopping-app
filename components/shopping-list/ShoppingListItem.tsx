@@ -30,14 +30,15 @@ export function ShoppingListItem({
         <View style={styles.buttonContainer}>
           <Pressable
             onPress={() => toggleCompleted(item.id)}
-            style={styles.completeButton}
+            style={{
+              ...styles.completeButton,
+              backgroundColor: item.completed
+                ? theme.colors.secondary
+                : theme.colors.completed,
+            }}
           >
             {item.completed ? (
-              <AntDesign
-                name="close"
-                size={16}
-                color={theme.colors.secondary}
-              />
+              <AntDesign name="close" size={16} color={theme.colors.primary} />
             ) : (
               <AntDesign
                 name="check"

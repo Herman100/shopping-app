@@ -15,29 +15,36 @@ export function ShoppingList() {
     (id: string) => {
       const item = items.find((item) => item.id === id);
       if (!item) return;
-      Alert.alert(
-        item.completed ? "Mark as incomplete?" : "Mark as completed?",
-        `Are you sure you want to mark "${capitalizeFirstWord(
-          item.name,
-        )}" as ${item.completed ? "incomplete" : "completed"}?`,
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Yes",
-            onPress: () =>
-              setItems((prevItems) =>
-                prevItems.map((prevItem) =>
-                  prevItem.id === item.id
-                    ? { ...prevItem, completed: !prevItem.completed }
-                    : prevItem,
-                ),
-              ),
-          },
-        ],
+      setItems((prevItems) =>
+        prevItems.map((prevItem) =>
+          prevItem.id === item.id
+            ? { ...prevItem, completed: !prevItem.completed }
+            : prevItem,
+        ),
       );
+      //   Alert.alert(
+      //     item.completed ? "Mark as incomplete?" : "Mark as completed?",
+      //     `Are you sure you want to mark "${capitalizeFirstWord(
+      //       item.name,
+      //     )}" as ${item.completed ? "incomplete" : "completed"}?`,
+      //     [
+      //       {
+      //         text: "Cancel",
+      //         style: "cancel",
+      //       },
+      //       {
+      //         text: "Yes",
+      //         onPress: () =>
+      //           setItems((prevItems) =>
+      //             prevItems.map((prevItem) =>
+      //               prevItem.id === item.id
+      //                 ? { ...prevItem, completed: !prevItem.completed }
+      //                 : prevItem,
+      //             ),
+      //           ),
+      //       },
+      //     ],
+      //   );
     },
     [items],
   );
