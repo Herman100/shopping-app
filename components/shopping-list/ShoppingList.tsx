@@ -1,8 +1,6 @@
 import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
 import { theme } from "../../theme";
 import { useState } from "react";
-import { capitalizeFirstWord } from "../../utils/common";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { ShoppingListItem } from "./ShoppingListItem";
 
 export function ShoppingList() {

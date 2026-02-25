@@ -22,12 +22,40 @@ export function ShoppingListItem({
   removeItem,
 }: ShoppingListItemProps) {
   const handleToggleCompleted = useCallback(() => {
-    toggleCompleted(item.id);
-  }, [item.id, toggleCompleted]);
+    Alert.alert(
+      item.completed ? "Mark as incomplete?" : "Mark as completed?",
+      `Are you sure you want to mark "${capitalizeFirstWord(
+        item.name,
+      )}" as ${item.completed ? "incomplete" : "completed"}?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => toggleCompleted(item.id),
+        },
+      ],
+    );
+  }, [item, toggleCompleted]);
 
   const handleRemoveItem = useCallback(() => {
-    removeItem(item.id);
-  }, [item.id, removeItem]);
+    Alert.alert(
+      "Remove item?",
+      `Are you sure you want to remove "${capitalizeFirstWord(item.name)}" from your shopping list?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => removeItem(item.id),
+        },
+      ],
+    );
+  }, [item, removeItem]);
 
   return (
     <View style={styles.container}>
@@ -117,14 +145,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     ...theme.shadows.medium,
   },
-  // buttonText: {
-  //   color: theme.colors.secondary,
-  //   fontFamily: theme.fonts.bold,
-  //   paddingHorizontal: 8,
-  // },
-  // lineSeparator: {
-  //   width: "100%",
-  //   height: 0.5,
-  //   backgroundColor: theme.colors.secondary,
-  // },
 });
