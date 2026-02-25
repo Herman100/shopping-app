@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
 import { theme } from "../../theme";
-import { use, useCallback, useState } from "react";
+import { useCallback } from "react";
 import { capitalizeFirstWord } from "../../utils/common";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
