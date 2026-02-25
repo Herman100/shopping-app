@@ -1,144 +1,72 @@
 import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
 import { theme } from "../../theme";
-import { useState } from "react";
+import { use, useCallback, useState } from "react";
 import { capitalizeFirstWord } from "../../utils/common";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
-export function ShoppingListItem() {
-  const [items, setItems] = useState<{ name: string; completed: boolean }[]>([
-    { name: "", completed: false },
-  ]);
+type Item = {
+  id: number;
+  name: string;
+  completed: boolean;
+};
 
-  const showInput = () => {
-    Alert.prompt(
-      "Add Item",
-      "Enter the name of the item you want to add.",
-      (text) => {
-        const trimmedText = text.trim();
+type ShoppingListItemProps = {
+  readonly item: Item;
+  readonly toggleCompleted: (id: number) => void;
+  readonly removeItem: (id: number) => void;
+};
 
-        if (
-          trimmedText === "" ||
-          items.some(
-            (item) => item.name.toLowerCase() === trimmedText.toLowerCase(),
-          )
-        ) {
-          Alert.alert(
-            "Invalid input or duplicate item",
-            "Please enter a valid item name.",
-          );
-        } else {
-          setItems((prevItems) => [
-            ...prevItems,
-            { name: trimmedText, completed: false },
-          ]);
-          Alert.alert(
-            "Item added",
-            `You have added ${trimmedText} to your shopping list.`,
-          );
-        }
-      },
-    );
-  };
+export function ShoppingListItem({
+  item,
+  toggleCompleted,
+  removeItem,
+}: ShoppingListItemProps) {
+  const handleToggleCompleted = useCallback(() => {
+    toggleCompleted(item.id);
+  }, [item.id, toggleCompleted]);
 
-  const removeItem = (itemToRemove: string) => {
-    Alert.alert(
-      "Remove Item",
-      `Are you sure you want to remove ${itemToRemove} from your shopping list?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "OK",
-          style: "destructive",
-          onPress: () => {
-            setItems((prevItems) =>
-              prevItems.filter((item) => item.name !== itemToRemove),
-            );
-            Alert.alert(
-              "Item removed",
-              `${itemToRemove} has been removed from your shopping list.`,
-            );
-          },
-        },
-      ],
-    );
-  };
-
-  const markCompleted = (itemToMark: string) => {
-    Alert.alert(
-      `Mark as ${items.find((item) => item.name === itemToMark)?.completed ? "incomplete" : "completed"}`,
-      `Are you sure you want to mark ${itemToMark} as ${items.find((item) => item.name === itemToMark)?.completed ? "incomplete" : "completed"}?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "OK",
-          onPress: () => {
-            setItems((prevItems) =>
-              prevItems.map((item) =>
-                item.name === itemToMark
-                  ? { ...item, completed: !item.completed }
-                  : item,
-              ),
-            );
-            Alert.alert(
-              `Item marked as ${items.find((item) => item.name === itemToMark)?.completed ? "incomplete" : "completed"}`,
-              `${itemToMark} has been marked as ${items.find((item) => item.name === itemToMark)?.completed ? "incomplete" : "completed"}.`,
-            );
-          },
-        },
-      ],
-    );
-  };
+  const handleRemoveItem = useCallback(() => {
+    removeItem(item.id);
+  }, [item.id, removeItem]);
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={showInput} style={styles.button}>
-        <Text style={styles.buttonText}>Add item</Text>
-      </Pressable>
-      <View style={styles.lineSeparator} />
-      {items.map((item, index) => (
-        <View
-          key={`${item.name}-${index}`}
-          style={[styles.item, item.completed && styles.completedItem]}
-        >
-          <Text style={[styles.text, item.completed && styles.completedText]}>
-            {capitalizeFirstWord(item.name)}
-          </Text>
-          <View style={{ flexDirection: "row", gap: theme.spacing.small }}>
-            <Pressable
-              onPress={() => markCompleted(item.name)}
-              style={[
-                styles.button,
-                { backgroundColor: theme.colors.completed },
-              ]}
-            >
-              {item.completed ? (
-                <AntDesign
-                  name="close"
-                  size={16}
-                  color={theme.colors.secondary}
-                />
-              ) : (
-                <AntDesign
-                  name="check"
-                  size={16}
-                  color={theme.colors.secondary}
-                />
-              )}
-            </Pressable>
-
-            <Pressable
-              onPress={() => removeItem(item.name)}
-              style={[styles.button, { backgroundColor: theme.colors.delete }]}
-            >
-              <MaterialCommunityIcons
-                name="delete"
-                size={24}
+      <View style={[styles.item, item.completed && styles.completedItem]}>
+        <Text style={[styles.text, item.completed && styles.completedText]}>
+          {capitalizeFirstWord(item.name)}
+        </Text>
+        <View style={{ flexDirection: "row", gap: theme.spacing.small }}>
+          <Pressable
+            onPress={handleToggleCompleted}
+            style={[styles.button, { backgroundColor: theme.colors.completed }]}
+          >
+            {item.completed ? (
+              <AntDesign
+                name="close"
+                size={16}
                 color={theme.colors.secondary}
               />
-            </Pressable>
-          </View>
+            ) : (
+              <AntDesign
+                name="check"
+                size={16}
+                color={theme.colors.secondary}
+              />
+            )}
+          </Pressable>
+
+          <Pressable
+            onPress={handleRemoveItem}
+            style={[styles.button, { backgroundColor: theme.colors.delete }]}
+          >
+            <MaterialCommunityIcons
+              name="delete"
+              size={24}
+              color={theme.colors.secondary}
+            />
+          </Pressable>
         </View>
-      ))}
+      </View>
     </View>
   );
 }
@@ -189,14 +117,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     ...theme.shadows.medium,
   },
-  buttonText: {
-    color: theme.colors.secondary,
-    fontFamily: theme.fonts.bold,
-    paddingHorizontal: 8,
-  },
-  lineSeparator: {
-    width: "100%",
-    height: 0.5,
-    backgroundColor: theme.colors.secondary,
-  },
+  // buttonText: {
+  //   color: theme.colors.secondary,
+  //   fontFamily: theme.fonts.bold,
+  //   paddingHorizontal: 8,
+  // },
+  // lineSeparator: {
+  //   width: "100%",
+  //   height: 0.5,
+  //   backgroundColor: theme.colors.secondary,
+  // },
 });
