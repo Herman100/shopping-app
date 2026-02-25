@@ -12,8 +12,8 @@ type Item = {
 
 type ShoppingListItemProps = {
   readonly item: Item;
-  readonly toggleCompleted: (id: string) => void;
-  readonly removeItem: (id: string) => void;
+  readonly toggleCompleted: (item: Item) => void;
+  readonly removeItem: (item: Item) => void;
 };
 
 export function ShoppingListItem({
@@ -21,52 +21,16 @@ export function ShoppingListItem({
   toggleCompleted,
   removeItem,
 }: ShoppingListItemProps) {
-  const handleToggleCompleted = useCallback(() => {
-    Alert.alert(
-      item.completed ? "Mark as incomplete?" : "Mark as completed?",
-      `Are you sure you want to mark "${capitalizeFirstWord(
-        item.name,
-      )}" as ${item.completed ? "incomplete" : "completed"}?`,
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Yes",
-          onPress: () => toggleCompleted(item.id),
-        },
-      ],
-    );
-  }, [item, toggleCompleted]);
-
-  const handleRemoveItem = useCallback(() => {
-    Alert.alert(
-      "Remove item?",
-      `Are you sure you want to remove "${capitalizeFirstWord(item.name)}" from your shopping list?`,
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Yes",
-          onPress: () => removeItem(item.id),
-        },
-      ],
-    );
-  }, [item, removeItem]);
-
   return (
     <View style={styles.container}>
       <View style={[styles.item, item.completed && styles.completedItem]}>
         <Text style={[styles.text, item.completed && styles.completedText]}>
           {capitalizeFirstWord(item.name)}
         </Text>
-        <View style={{ flexDirection: "row", gap: theme.spacing.small }}>
+        <View style={styles.buttonContainer}>
           <Pressable
-            onPress={handleToggleCompleted}
-            style={[styles.button, { backgroundColor: theme.colors.completed }]}
+            onPress={() => toggleCompleted(item)}
+            style={styles.completeButton}
           >
             {item.completed ? (
               <AntDesign
@@ -84,8 +48,8 @@ export function ShoppingListItem({
           </Pressable>
 
           <Pressable
-            onPress={handleRemoveItem}
-            style={[styles.button, { backgroundColor: theme.colors.delete }]}
+            onPress={() => removeItem(item)}
+            style={styles.deleteButton}
           >
             <MaterialCommunityIcons
               name="delete"
@@ -101,12 +65,8 @@ export function ShoppingListItem({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    gap: theme.spacing.small,
-    backgroundColor: theme.colors.background,
-    color: theme.colors.text,
-    alignItems: "center",
-    marginTop: 50,
+    width: "100%",
+    marginBottom: theme.spacing.small,
   },
   item: {
     flexDirection: "row",
@@ -125,22 +85,27 @@ const styles = StyleSheet.create({
   text: {
     color: theme.colors.primary,
     fontFamily: theme.fonts.regular,
-    justifyContent: "center",
-    alignItems: "center",
     includeFontPadding: false,
   },
   completedText: {
-    color: theme.colors.primary,
-    fontFamily: theme.fonts.regular,
     textDecorationLine: "line-through",
-    justifyContent: "center",
-    alignItems: "center",
-    includeFontPadding: false,
   },
-  button: {
+  buttonContainer: {
+    flexDirection: "row",
+    gap: theme.spacing.small,
+  },
+  completeButton: {
     padding: 8,
     borderRadius: 6,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.completed,
+    borderColor: theme.colors.secondary,
+    borderWidth: 1,
+    ...theme.shadows.medium,
+  },
+  deleteButton: {
+    padding: 8,
+    borderRadius: 6,
+    backgroundColor: theme.colors.delete,
     borderColor: theme.colors.secondary,
     borderWidth: 1,
     ...theme.shadows.medium,

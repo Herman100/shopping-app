@@ -1,14 +1,67 @@
 import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
 import { theme } from "../../theme";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { ShoppingListItem } from "./ShoppingListItem";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
+import { capitalizeFirstWord } from "../../utils/common";
 
 export function ShoppingList() {
   const [items, setItems] = useState<
     { id: string; name: string; completed: boolean }[]
   >([]);
+
+  const handleToggleCompleted = useCallback(
+    ({ item }: { item: { id: string; name: string; completed: boolean } }) => {
+      Alert.alert(
+        item.completed ? "Mark as incomplete?" : "Mark as completed?",
+        `Are you sure you want to mark "${capitalizeFirstWord(
+          item.name,
+        )}" as ${item.completed ? "incomplete" : "completed"}?`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: () =>
+              setItems((prevItems) =>
+                prevItems.map((prevItem) =>
+                  prevItem.id === item.id
+                    ? { ...prevItem, completed: !prevItem.completed }
+                    : prevItem,
+                ),
+              ),
+          },
+        ],
+      );
+    },
+    [],
+  );
+
+  const handleRemoveItem = useCallback(
+    ({ item }: { item: { id: string; name: string; completed: boolean } }) => {
+      Alert.alert(
+        "Remove item?",
+        `Are you sure you want to remove "${capitalizeFirstWord(item.name)}" from your shopping list?`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: () =>
+              setItems((prevItems) =>
+                prevItems.filter((prevItem) => prevItem.id !== item.id),
+              ),
+          },
+        ],
+      );
+    },
+    [],
+  );
 
   const showInput = () => {
     Alert.prompt(
@@ -47,26 +100,13 @@ export function ShoppingList() {
         <Text style={styles.buttonText}>Add item</Text>
       </Pressable>
       <View style={styles.lineSeparator} />
-      {items.map((item, index) => (
-        <View key={item.id}>
-          <ShoppingListItem
-            item={item}
-            toggleCompleted={(id) => {
-              setItems((prevItems) =>
-                prevItems.map((item) =>
-                  item.id === id
-                    ? { ...item, completed: !item.completed }
-                    : item,
-                ),
-              );
-            }}
-            removeItem={(id) => {
-              setItems((prevItems) =>
-                prevItems.filter((item) => item.id !== id),
-              );
-            }}
-          />
-        </View>
+      {items.map((item) => (
+        <ShoppingListItem
+          key={item.id}
+          item={item}
+          toggleCompleted={() => handleToggleCompleted({ item })}
+          removeItem={() => handleRemoveItem({ item })}
+        />
       ))}
     </View>
   );
