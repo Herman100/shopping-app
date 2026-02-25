@@ -2,6 +2,7 @@ import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
 import { theme } from "../../theme";
 import { useState } from "react";
 import { capitalizeFirstWord } from "../../utils/common";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export function ShoppingListItem() {
   const [items, setItems] = useState<string[]>([]);
@@ -99,14 +100,22 @@ export function ShoppingListItem() {
                   { backgroundColor: theme.colors.completed },
                 ]}
               >
-                <Text style={styles.buttonText}>Completed</Text>
+                <AntDesign
+                  name="check"
+                  size={16}
+                  color={theme.colors.secondary}
+                />
               </Pressable>
             )}
             <Pressable
               onPress={() => removeItem(item)}
               style={[styles.button, { backgroundColor: theme.colors.delete }]}
             >
-              <Text style={styles.buttonText}>Delete</Text>
+              <MaterialCommunityIcons
+                name="delete"
+                size={24}
+                color={theme.colors.secondary}
+              />
             </Pressable>
           </View>
         </View>
