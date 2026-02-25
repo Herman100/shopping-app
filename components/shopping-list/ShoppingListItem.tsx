@@ -12,8 +12,8 @@ type Item = {
 
 type ShoppingListItemProps = {
   readonly item: Item;
-  readonly toggleCompleted: (item: Item) => void;
-  readonly removeItem: (item: Item) => void;
+  readonly toggleCompleted: (id: string) => void;
+  readonly removeItem: (id: string) => void;
 };
 
 export function ShoppingListItem({
@@ -29,7 +29,7 @@ export function ShoppingListItem({
         </Text>
         <View style={styles.buttonContainer}>
           <Pressable
-            onPress={() => toggleCompleted(item)}
+            onPress={() => toggleCompleted(item.id)}
             style={styles.completeButton}
           >
             {item.completed ? (
@@ -48,7 +48,7 @@ export function ShoppingListItem({
           </Pressable>
 
           <Pressable
-            onPress={() => removeItem(item)}
+            onPress={() => removeItem(item.id)}
             style={styles.deleteButton}
           >
             <MaterialCommunityIcons

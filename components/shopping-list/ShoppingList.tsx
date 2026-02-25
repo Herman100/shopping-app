@@ -12,7 +12,9 @@ export function ShoppingList() {
   >([]);
 
   const handleToggleCompleted = useCallback(
-    ({ item }: { item: { id: string; name: string; completed: boolean } }) => {
+    (id: string) => {
+      const item = items.find((item) => item.id === id);
+      if (!item) return;
       Alert.alert(
         item.completed ? "Mark as incomplete?" : "Mark as completed?",
         `Are you sure you want to mark "${capitalizeFirstWord(
@@ -37,11 +39,13 @@ export function ShoppingList() {
         ],
       );
     },
-    [],
+    [items],
   );
 
   const handleRemoveItem = useCallback(
-    ({ item }: { item: { id: string; name: string; completed: boolean } }) => {
+    (id: string) => {
+      const item = items.find((item) => item.id === id);
+      if (!item) return;
       Alert.alert(
         "Remove item?",
         `Are you sure you want to remove "${capitalizeFirstWord(item.name)}" from your shopping list?`,
@@ -60,7 +64,7 @@ export function ShoppingList() {
         ],
       );
     },
-    [],
+    [items],
   );
 
   const showInput = () => {
@@ -104,8 +108,8 @@ export function ShoppingList() {
         <ShoppingListItem
           key={item.id}
           item={item}
-          toggleCompleted={() => handleToggleCompleted({ item })}
-          removeItem={() => handleRemoveItem({ item })}
+          toggleCompleted={handleToggleCompleted}
+          removeItem={handleRemoveItem}
         />
       ))}
     </View>
