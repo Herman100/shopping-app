@@ -5,7 +5,9 @@ import { capitalizeFirstWord } from "../../utils/common";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export function ShoppingListItem() {
-  const [items, setItems] = useState<string[]>([]);
+  const [items, setItems] = useState<{ name: string; completed: boolean }[]>([
+    { name: "", completed: false },
+  ]);
 
   const showInput = () => {
     Alert.prompt(
@@ -17,7 +19,10 @@ export function ShoppingListItem() {
         if (trimmedText === "") {
           Alert.alert("Invalid input", "Please enter a valid item name.");
         } else {
-          setItems((prevItems) => [...prevItems, trimmedText]);
+          setItems((prevItems) => [
+            ...prevItems,
+            { name: trimmedText, completed: false },
+          ]);
           Alert.alert(
             "Item added",
             `You have added ${trimmedText} to your shopping list.`,
@@ -38,7 +43,7 @@ export function ShoppingListItem() {
           style: "destructive",
           onPress: () => {
             setItems((prevItems) =>
-              prevItems.filter((item) => item !== itemToRemove),
+              prevItems.filter((item) => item.name !== itemToRemove),
             );
             Alert.alert(
               "Item removed",
@@ -61,7 +66,7 @@ export function ShoppingListItem() {
           onPress: () => {
             setItems((prevItems) =>
               prevItems.map((item) =>
-                item === itemToMark ? `${item} completed` : item,
+                item.name === itemToMark ? { ...item, completed: true } : item,
               ),
             );
             Alert.alert(
@@ -82,19 +87,19 @@ export function ShoppingListItem() {
       <View style={styles.lineSeparator} />
       {items.map((item, index) => (
         <View
-          key={`${item}-${index}` + "container"}
+          key={`${item.name}-${index}`}
           style={[
             styles.item,
-            item.includes("completed") && {
+            item.completed && {
               backgroundColor: theme.colors.completed,
             },
           ]}
         >
-          <Text style={styles.text}>{capitalizeFirstWord(item)}</Text>
+          <Text style={styles.text}>{capitalizeFirstWord(item.name)}</Text>
           <View style={{ flexDirection: "row", gap: theme.spacing.small }}>
-            {!item.includes("completed") && (
+            {!item.completed && (
               <Pressable
-                onPress={() => markCompleted(item)}
+                onPress={() => markCompleted(item.name)}
                 style={[
                   styles.button,
                   { backgroundColor: theme.colors.completed },
@@ -108,7 +113,7 @@ export function ShoppingListItem() {
               </Pressable>
             )}
             <Pressable
-              onPress={() => removeItem(item)}
+              onPress={() => removeItem(item.name)}
               style={[styles.button, { backgroundColor: theme.colors.delete }]}
             >
               <MaterialCommunityIcons
