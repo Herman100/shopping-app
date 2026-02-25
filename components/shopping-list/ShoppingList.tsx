@@ -2,10 +2,12 @@ import { Text, View, StyleSheet, Pressable, Alert } from "react-native";
 import { theme } from "../../theme";
 import { useState } from "react";
 import { ShoppingListItem } from "./ShoppingListItem";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 export function ShoppingList() {
   const [items, setItems] = useState<
-    { id: number; name: string; completed: boolean }[]
+    { id: string; name: string; completed: boolean }[]
   >([]);
 
   const showInput = () => {
@@ -28,7 +30,7 @@ export function ShoppingList() {
         } else {
           setItems((prevItems) => [
             ...prevItems,
-            { id: prevItems.length, name: trimmedText, completed: false },
+            { id: uuidv4(), name: trimmedText, completed: false },
           ]);
           Alert.alert(
             "Item added",
@@ -46,18 +48,22 @@ export function ShoppingList() {
       </Pressable>
       <View style={styles.lineSeparator} />
       {items.map((item, index) => (
-        <View key={`${item.name}-${index}`}>
+        <View key={item.id}>
           <ShoppingListItem
-            item={{ id: index, name: item.name, completed: item.completed }}
+            item={item}
             toggleCompleted={(id) => {
               setItems((prevItems) =>
-                prevItems.map((item, idx) =>
-                  idx === id ? { ...item, completed: !item.completed } : item,
+                prevItems.map((item) =>
+                  item.id === id
+                    ? { ...item, completed: !item.completed }
+                    : item,
                 ),
               );
             }}
             removeItem={(id) => {
-              setItems((prevItems) => prevItems.filter((_, idx) => idx !== id));
+              setItems((prevItems) =>
+                prevItems.filter((item) => item.id !== id),
+              );
             }}
           />
         </View>

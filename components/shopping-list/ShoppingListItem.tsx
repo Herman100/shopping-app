@@ -5,15 +5,15 @@ import { capitalizeFirstWord } from "../../utils/common";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 type Item = {
-  id: number;
+  id: string;
   name: string;
   completed: boolean;
 };
 
 type ShoppingListItemProps = {
   readonly item: Item;
-  readonly toggleCompleted: (id: number) => void;
-  readonly removeItem: (id: number) => void;
+  readonly toggleCompleted: (id: string) => void;
+  readonly removeItem: (id: string) => void;
 };
 
 export function ShoppingListItem({
