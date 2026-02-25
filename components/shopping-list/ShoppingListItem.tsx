@@ -16,8 +16,16 @@ export function ShoppingListItem() {
       (text) => {
         const trimmedText = text.trim();
 
-        if (trimmedText === "") {
-          Alert.alert("Invalid input", "Please enter a valid item name.");
+        if (
+          trimmedText === "" ||
+          items.some(
+            (item) => item.name.toLowerCase() === trimmedText.toLowerCase(),
+          )
+        ) {
+          Alert.alert(
+            "Invalid input or duplicate item",
+            "Please enter a valid item name.",
+          );
         } else {
           setItems((prevItems) => [
             ...prevItems,
@@ -57,8 +65,8 @@ export function ShoppingListItem() {
 
   const markCompleted = (itemToMark: string) => {
     Alert.alert(
-      "Mark as Completed",
-      `Are you sure you want to mark ${itemToMark} as completed?`,
+      `Mark as ${items.find((item) => item.name === itemToMark)?.completed ? "incomplete" : "completed"}`,
+      `Are you sure you want to mark ${itemToMark} as ${items.find((item) => item.name === itemToMark)?.completed ? "incomplete" : "completed"}?`,
       [
         { text: "Cancel", style: "cancel" },
         {
@@ -66,12 +74,14 @@ export function ShoppingListItem() {
           onPress: () => {
             setItems((prevItems) =>
               prevItems.map((item) =>
-                item.name === itemToMark ? { ...item, completed: true } : item,
+                item.name === itemToMark
+                  ? { ...item, completed: !item.completed }
+                  : item,
               ),
             );
             Alert.alert(
-              "Item marked as completed",
-              `${itemToMark} has been marked as completed.`,
+              `Item marked as ${items.find((item) => item.name === itemToMark)?.completed ? "incomplete" : "completed"}`,
+              `${itemToMark} has been marked as ${items.find((item) => item.name === itemToMark)?.completed ? "incomplete" : "completed"}.`,
             );
           },
         },
@@ -88,30 +98,34 @@ export function ShoppingListItem() {
       {items.map((item, index) => (
         <View
           key={`${item.name}-${index}`}
-          style={[
-            styles.item,
-            item.completed && {
-              backgroundColor: theme.colors.completed,
-            },
-          ]}
+          style={[styles.item, item.completed && styles.completedItem]}
         >
-          <Text style={styles.text}>{capitalizeFirstWord(item.name)}</Text>
+          <Text style={[styles.text, item.completed && styles.completedText]}>
+            {capitalizeFirstWord(item.name)}
+          </Text>
           <View style={{ flexDirection: "row", gap: theme.spacing.small }}>
-            {!item.completed && (
-              <Pressable
-                onPress={() => markCompleted(item.name)}
-                style={[
-                  styles.button,
-                  { backgroundColor: theme.colors.completed },
-                ]}
-              >
+            <Pressable
+              onPress={() => markCompleted(item.name)}
+              style={[
+                styles.button,
+                { backgroundColor: theme.colors.completed },
+              ]}
+            >
+              {item.completed ? (
+                <AntDesign
+                  name="close"
+                  size={16}
+                  color={theme.colors.secondary}
+                />
+              ) : (
                 <AntDesign
                   name="check"
                   size={16}
                   color={theme.colors.secondary}
                 />
-              </Pressable>
-            )}
+              )}
+            </Pressable>
+
             <Pressable
               onPress={() => removeItem(item.name)}
               style={[styles.button, { backgroundColor: theme.colors.delete }]}
@@ -137,7 +151,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     alignItems: "center",
     marginTop: 50,
-    // justifyContent: "flex-start",
   },
   item: {
     flexDirection: "row",
@@ -150,9 +163,20 @@ const styles = StyleSheet.create({
     ...theme.shadows.heavy,
     paddingHorizontal: 16,
   },
+  completedItem: {
+    backgroundColor: theme.colors.completed,
+  },
   text: {
     color: theme.colors.primary,
     fontFamily: theme.fonts.regular,
+    justifyContent: "center",
+    alignItems: "center",
+    includeFontPadding: false,
+  },
+  completedText: {
+    color: theme.colors.primary,
+    fontFamily: theme.fonts.regular,
+    textDecorationLine: "line-through",
     justifyContent: "center",
     alignItems: "center",
     includeFontPadding: false,
@@ -168,7 +192,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: theme.colors.secondary,
     fontFamily: theme.fonts.bold,
-    textTransform: "uppercase",
     paddingHorizontal: 8,
   },
   lineSeparator: {
